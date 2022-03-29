@@ -37,6 +37,26 @@ serieRoutes.get('/:serieId', async (req, res) => {
     }
 });
 
+serieRoutes.get('/:actorName', async (req, res) => {
+    try {
+        const { actorName } = req.params;
+        const data = await service.findSerieByActor(actorName);
+        res.status(200).json({ data });
+    } catch (error) {
+        res.status(404).json({ message: error });
+    }
+});
+
+serieRoutes.get('/:date', async (req, res) => {
+    try {
+        const { serieDate } = req.params;
+        const data = await service.findSerieByDate(serieDate);
+        res.status(200).json({ data });
+    } catch (error) {
+        res.status(404).json({ message: error });
+    }
+});
+
 serieRoutes.put('/:serieId', async (req, res) => {
     try {
         const { serieId } = req.params;
