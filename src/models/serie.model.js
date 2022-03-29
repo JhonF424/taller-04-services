@@ -1,0 +1,53 @@
+const mongoose = require('mongoose');
+
+const serieSchema = mongoose.Schema({
+    serie: {
+        type: String,
+        require: true,
+        unique: true,
+    },
+    number_seasons: {
+        type: Number,
+        require: true,
+        unique: true,
+    },
+    original_language: {
+        type: String,
+        require: true,
+        unique: true,
+    },
+    features_seasons: {
+        type: Array,
+        require: true,
+        season_number: {
+            type: Number,
+            require: true,
+        },
+        season_name: {
+            type: String,
+            require: true,
+        },
+        premier_date: {
+            type: Date,
+            require: true,
+        },
+        cast: {
+            type: Array,
+            require: true,
+        },
+        episodes: {
+            type: Array,
+            require: true,
+            episode_name: {
+                type: String,
+                require: true,
+            },
+            time_duration: {
+                type: Number,
+                require: true,
+            }
+        }
+    }
+});
+
+module.exports = mongoose.model('tallerSeriesCollection', serieSchema);
