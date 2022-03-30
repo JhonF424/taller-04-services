@@ -57,23 +57,6 @@ serieRoutes.get('/:date', async (req, res) => {
     }
 });
 
-serieRoutes.put('/:serieId', async (req, res) => {
-    try {
-        const { serieId } = req.params;
-        const { serie, number_episodes, number_seasons, description } = req.body;
-        const data = await service.editSerie(
-            serieId,
-            serie,
-            number_episodes,
-            number_seasons,
-            description
-        );
-        res.status(200).json({ data });
-    } catch (error) {
-        res.status(204).json({ message: err });
-    }
-});
-
 serieRoutes.delete('/:serieId', async (req, res) => {
     try {
         const { serieId } = req.params;

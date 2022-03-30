@@ -21,7 +21,7 @@ class SeriesServices {
     }
 
     async findSerieByDate(date) {
-        return serieSchema.finf({ 'features_seasons.premier_date': date });
+        return serieSchema.find({ 'features_seasons.premier_date': date });
     }
     // async editSerie(
     //     serieID,
