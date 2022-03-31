@@ -4,17 +4,14 @@ const serieSchema = mongoose.Schema({
     serie: {
         type: String,
         require: true,
-        unique: true,
     },
     number_seasons: {
         type: Number,
         require: true,
-        unique: true,
     },
     original_language: {
         type: String,
         require: true,
-        unique: true,
     },
     features_seasons: {
         type: Array,

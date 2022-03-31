@@ -27,44 +27,54 @@ serieRoutes.get('/', async (req, res) => {
     }
 });
 
-serieRoutes.get('/:serieId', async (req, res) => {
+serieRoutes.get('/findByID/:serieId', async (req, res, next) => {
     try {
         const { serieId } = req.params;
         const data = await service.showSerie(serieId);
         res.status(200).json({ data });
     } catch (error) {
-        res.status(404).json({ message: error });
+        next(error);
     }
 });
 
-serieRoutes.get('/:actorName', async (req, res) => {
+serieRoutes.get('/findByActor/:actorName', async (req, res, next) => {
     try {
         const { actorName } = req.params;
         const data = await service.findSerieByActor(actorName);
         res.status(200).json({ data });
     } catch (error) {
-        res.status(404).json({ message: error });
+        next(error);
     }
 });
 
-serieRoutes.get('/:date', async (req, res) => {
+serieRoutes.get('/findByDate/:date', async (req, res, next) => {
     try {
         const { serieDate } = req.params;
         const data = await service.findSerieByDate(serieDate);
         res.status(200).json({ data });
     } catch (error) {
-        res.status(404).json({ message: error });
+        next(error);
     }
 });
 
-serieRoutes.delete('/:serieId', async (req, res) => {
+serieRoutes.delete('/delete/:serieId', async (req, res, next) => {
     try {
         const { serieId } = req.params;
         const data = await service.removeSerie(serieId);
         res.status(200).json({ data });
     } catch (error) {
-        res.status(204).json({ message: err });
+        next(error);
     }
 });
+
+serieRoutes.put('/update/:serieId', async (req, res, next) => {
+    try {
+        const { serieId } = req.params;
+        const data = await service.editSerie(serieId);
+        res.status(200), json({ data });
+    } catch (error) {
+        next(error);
+    }
+})
 
 module.exports = serieRoutes;

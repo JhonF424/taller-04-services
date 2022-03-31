@@ -1,48 +1,88 @@
 const serieSchema = require('../models/serie.model');
-
+const Boom = require('@hapi/boom');
 class SeriesServices {
     async createSerie(serie) {
-        serie.save();
+        serie.save()
+            .then(
+                (seriesFind) => {
+                    if (!seriesFind) throw Boom.notFound("No se pudo crear la serie");
+                    return seriesFind;
+                }
+            )
+
         return serie;
     }
 
     async listSeries() {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => resolve(serieSchema.find()), 3000);
-        });
+        return serieSchema.find()
+            .then(
+                (seriesFind) => {
+                    if (!seriesFind) throw Boom.notFound("No se encontró el listado de series");
+                    return seriesFind;
+                }
+            )
     }
 
     async showSerie(serieId) {
-        return serieSchema.findById({ _id: serieId });
+        return serieSchema.findById({ _id: serieId })
+            .then(
+                (serieFind) => {
+                    if (!serieFind) throw Boom.notFound("No se encontró la serie");
+                    return serieFind;
+                }
+            )
     }
 
     async findSerieByActor(actorName) {
-        return serieSchema.find({ 'features_seasons.cast': actorName });
+        return serieSchema.find({ 'features_seasons.cast': actorName })
+            .then(
+                (serieFind) => {
+                    if (!serieFind) throw Boom.notFound("No se encontró la serie");
+                    return serieFind;
+                }
+            )
     }
 
     async findSerieByDate(date) {
-        return serieSchema.find({ 'features_seasons.premier_date': date });
+        return serieSchema.find({ 'features_seasons.premier_date': date })
+            .then(
+                (serieFind) => {
+                    if (!serieFind) throw Boom.notFound("No se encontró la serie");
+                    return serieFind;
+                }
+            )
     }
-    // async editSerie(
-    //     serieID,
-    //     serie,
-    //     number_seasons,
-    //     original_language,
-    //     features_seasons,
+    async editSerie(
+        serieID,
+        serie,
+        number_seasons,
+        orginal_lenguage,
+        features_seasons
 
-    //     ) {
-    //     return serieSchema.findById({ _id: serieID }).then((serieFind) => {
-    //         if (!serieID) throw Error('Serie no encontrada');
-    //         return serieSchema.updateOne(
-    //             { serieID },
-    //             { serie, number_episodes, number_seasons, description }
-    //         )
-    //     });
-    // }
+    ) {
+        return serieSchema.findById({ _id: serieID }).then((serieFind) => {
+            if (!serieFind) throw Boom.notFound("No se encontró la serie");
+            return serieSchema.updateOne(
+                { serieID },
+                {
+                    serie,
+                    number_seasons,
+                    orginal_lenguage,
+                    features_seasons
+                }
+            )
+        });
+    }
 
     async removeSerie(serieId) {
         const serieRemove = serieSchema.findById({ _id: serieId });
-        serieSchema.deleteOne(serieRemove);
+        serieSchema.deleteOne(serieRemove)
+            .then(
+                (serieFind) => {
+                    if (!serieFind) throw Boom.notFound("No se pude eliminar la serie");
+                    return serieFind;
+                }
+            )
     }
 }
 
