@@ -1,10 +1,37 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const routerApi = require('./src/routes');
-const app = express();
-const { logErrors, errorHandler, boomErrorHandler } = require('./src/handler/errors.handler')
-
+const sgMail = require('@sendgrid/mail');
 require('dotenv').config();
+const app = express();
+const {
+    logErrors,
+    errorHandler,
+    boomErrorHandler
+} = require('./src/handler/errors.handler')
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+const sgMailSendGrid = require('./src/emailSendGrid/emailSendGrid');
+
+client.messages
+    .create({
+        body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
+        from: '+16165778897',
+        to: '+573225585931'
+    })
+    .then(message => console.log(message.sid));
+
+
+app.post('/api/v2/sendgrid', async(req, res, next) => {
+    try {
+        res.json(await sgMailSendGrid.sendOrderSerie(req.body));
+    } catch (err) {
+        next(err);
+    }
+})
+
 const port = process.env.PORT;
 
 app.listen(port, () => {

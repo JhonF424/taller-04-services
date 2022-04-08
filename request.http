@@ -32,3 +32,6 @@ GET http://localhost:3001/api/v2/series/findByDate/April HTTP/1.1
 
 ###
 DELETE http://localhost:3001/api/v2/series/delete/6245ad7a01ff66e80d5ac744 HTTP/1.1
+
+###
+GET http://localhost:5000/api/v2/sendgrid HTTP/1.1
