@@ -1,8 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const routerApi = require('./src/routes');
 const sgMail = require('@sendgrid/mail');
-require('dotenv').config();
 const app = express();
 const {
     logErrors,
@@ -14,6 +14,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 const sgMailSendGrid = require('./src/emailSendGrid/emailSendGrid');
+const { EmailAddress } = require('@sendgrid/helpers/classes');
 
 client.messages
     .create({
@@ -24,7 +25,7 @@ client.messages
     .then(message => console.log(message.sid));
 
 
-app.post('/api/v2/sendgrid', async(req, res, next) => {
+app.post('/api/v2/sendgrid', async (req, res, next) => {
     try {
         res.json(await sgMailSendGrid.sendOrderSerie(req.body));
     } catch (err) {
@@ -45,6 +46,22 @@ mongoose
 
 
 app.use(express.json());
+app.use(express.urlencode({ extended: false }));
+app.post('/api/email/confirmacion', async (req, res, next) => {
+    try {
+        res.json(await email.sendOrder(req.body));
+    } catch (error) {
+        next(error);
+    }
+});
+
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    console.error(err.message, err.stack);
+    res.status(statusCode).json({ message: err.message });
+    return;
+});
+
 app.use(logErrors);
 app.use(errorHandler);
 app.use(boomErrorHandler);
